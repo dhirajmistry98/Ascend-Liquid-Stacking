@@ -1,26 +1,1209 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
+@source "../components/**/*.{ts,tsx}";
+@source "../app/**/*.{ts,tsx}";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+  font-family: "Delight";
+  src:
+    local("Delight Regular"),
+    local("Delight");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@font-face {
+  font-family: "Delight";
+  src:
+    local("Delight Semibold"),
+    local("Delight SemiBold"),
+    local("Delight-Semibold"),
+    local("Delight-SemiBold"),
+    local("Delight");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    background: #030101;
+  }
+
+  body {
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    background: #030101;
+    color: #fff7f1;
+    font-family:
+      "Delight", "Avenir Next", "Inter", "SF Pro Display", "Segoe UI",
+      sans-serif;
+  }
+
+  button,
+  a {
+    font: inherit;
+  }
+
+  svg {
+    display: block;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+
+  /* ─── NOISE CANVAS ──────────────────────────────────────────────────────── */
+  .noise-canvas {
+    opacity: 0.9;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    transform: scale(1.02); /* Slight scale to hide edge artifacts */
+  }
+
+  /* ─── TYPOGRAPHY HELPERS ────────────────────────────────────────────────── */
+  .hero-type-glow {
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04),
+      0 12px 36px rgba(0, 0, 0, 0.35);
+  }
+
+  .hero-display {
+    font-family:
+      "Delight", "Avenir Next", "Inter", "SF Pro Display", "Segoe UI",
+      sans-serif;
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .hero-summary {
+    font-family:
+      "Delight", "Avenir Next", "Inter", "SF Pro Display", "Segoe UI",
+      sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  .hero-summary-break {
+    display: block;
+  }
+
+  /* ─── HERO BADGE ────────────────────────────────────────────────────────── */
+  .hero-badge {
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    padding: 0.56rem 1.5rem 0.48rem;
+  }
+
+  .hero-badge-label {
+    display: block;
+    line-height: 0.9;
+    transform: none;
+    white-space: nowrap;
+  }
+
+  /* ─── NAV / BRAND ───────────────────────────────────────────────────────── */
+  .nav-brand-shell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.26));
+  }
+
+  .nav-brand-shell svg {
+    height: 100%;
+    width: 100%;
+  }
+
+  /* ─── PANEL ─────────────────────────────────────────────────────────────── */
+  .panel-brand-shell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+  }
+
+  .panel-brand-shell svg {
+    height: 100%;
+    width: 100%;
+  }
+
+  .panel-shell {
+    background:
+      linear-gradient(180deg, rgba(255, 80, 40, 0.1)), linear-gradient(180deg),
+      rgba(8, 3, 3, 0.97);
+  }
+
+  .panel-shell::before {
+    display: none;
+  }
+
+  .panel-title {
+    width: fit-content;
+    margin-inline: auto;
+    max-width: none;
+    white-space: nowrap;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.03),
+      0 8px 18px rgba(0, 0, 0, 0.2);
+  }
+
+  .panel-subtitle {
+    width: 100%;
+    max-width: 18rem;
+    margin-inline: auto;
+    margin-top: 0.42rem;
+    line-height: 1.18;
+    white-space: normal;
+    text-align: center;
+    text-wrap: balance;
+    color: #838589 !important;
+  }
+
+  /* ─── WALLET ────────────────────────────────────────────────────────────── */
+  .wallet-block {
+    background: #19181d;
+  }
+
+  .wallet-section-title {
+    font-family: "DM Mono", "IBM Plex Mono", "SFMono-Regular", monospace;
+  }
+
+  .wallet-row {
+    background: transparent;
+  }
+
+  .wallet-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .wallet-arrow {
+    display: inline-flex;
+    height: 38px;
+    width: 38px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* ─── ARROW TILE ────────────────────────────────────────────────────────── */
+  .arrow-tile {
+    display: inline-flex;
+    height: 65.05px;
+    width: 65.05px;
+    border: 0.78px solid rgba(243, 82, 51, 0.22);
+    border-radius: 0 !important;
+    background: #f4f4f4;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+  }
+
+  /* ─── COIN ──────────────────────────────────────────────────────────────── */
+  .hero-coin-shell {
+    height: 92px;
+    width: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.42));
+  }
+
+  .hero-coin-image {
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.36));
+  }
+
+  /* ─── BUY THUMB ─────────────────────────────────────────────────────────── */
+  .buy-thumb {
+    background:
+      linear-gradient(180deg,
+        rgba(255, 255, 255, 0.04),
+        rgba(255, 255, 255, 0)),
+      linear-gradient(180deg, #050101 0%, #0d0303 100%);
+    position: relative;
+  }
+
+  .buy-thumb::before,
+  .buy-thumb::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 17px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .buy-thumb::before {
+    top: 20px;
+  }
+
+  .buy-thumb::after {
+    top: 40px;
+    opacity: 0.18;
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     GUIDE FRAME — full-screen border treatment
+     ════════════════════════════════════════════════════════════════════════════ */
+
+  /* Base: all line spans */
+  .gf-line {
+    position: absolute;
+    background: rgba(185, 107, 86, 0.28);
+  }
+
+  /* Base: center-dot spans (now diamonds) */
+  .gf-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    transform: translate(-50%, -50%) rotate(45deg);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: transparent;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+  }
+
+  /* Base: corner L-bracket spans - NOT USED ANYMORE but kept for reference or removed */
+  .gf-corner {
+    display: none;
+  }
+
+  /* ── Shared inset variable (override per breakpoint) ── */
+  .guide-frame {
+    --gf: 1.75rem; /* default inset from viewport edge */
+    width: 100%;
+    max-width: 1360px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+  }
+
+  /* ── Top edge ── */
+  .gf-top {
+    top: var(--gf);
+    left: var(--gf);
+    right: var(--gf);
+    height: 1px;
+  }
+
+  /* ── Bottom edge ── */
+  .gf-bottom {
+    bottom: var(--gf);
+    left: var(--gf);
+    right: var(--gf);
+    height: 1px;
+  }
+
+  /* ── Left & right verticals ── */
+  .gf-left {
+    top: var(--gf);
+    bottom: var(--gf);
+    left: var(--gf);
+    width: 1px;
+  }
+
+  .gf-right {
+    top: var(--gf);
+    bottom: var(--gf);
+    right: var(--gf);
+    width: 1px;
+  }
+
+  /* ── Center dots ── */
+  .gf-dot-top-center {
+    top: var(--gf);
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .gf-dot-bottom-center {
+    bottom: var(--gf);
+    left: 50%;
+    transform: translate(-50%, 50%) rotate(45deg);
+  }
+
+  /* ── Corner L-brackets ── */
+  .gf-corner-tl {
+    top: var(--gf);
+    left: var(--gf);
+    border-width: 1.5px 0 0 1.5px;
+    border-radius: 2px 0 0 0;
+    transform: translate(-3px, -3px);
+  }
+
+  .gf-corner-tr {
+    top: var(--gf);
+    right: var(--gf);
+    border-width: 1.5px 1.5px 0 0;
+    border-radius: 0 2px 0 0;
+    transform: translate(3px, -3px);
+  }
+
+  .gf-corner-bl {
+    bottom: var(--gf);
+    left: var(--gf);
+    border-width: 0 0 1.5px 1.5px;
+    border-radius: 0 0 0 2px;
+    transform: translate(-3px, 3px);
+  }
+
+  .gf-corner-br {
+    bottom: var(--gf);
+    right: var(--gf);
+    border-width: 0 1.5px 1.5px 0;
+    border-radius: 0 0 2px 0;
+    transform: translate(3px, 3px);
+  }
+
+  /* ── Desktop-only center vertical divider (hidden by default) ── */
+  .gf-center-divider {
+    display: none;
+    top: var(--gf);
+    bottom: var(--gf);
+    left: 50%;
+    width: 1px;
+    transform: translateX(-50%);
+  }
+
+
+  @media (min-width: 1024px) {
+    body {
+      overflow: hidden;
+    }
+
+    .page-shell {
+      max-width: 1360px;
+      height: 100vh;
+      padding: var(--gf);
+      padding-bottom: 1rem;
+    }
+
+    .desktop-stage {
+      min-height: calc(100vh - 78px);
+      align-items: stretch;
+      gap: 2rem;
+    }
+
+    .hero-copy {
+      max-width: 34rem;
+      padding-top: 0 !important;
+    }
+
+    .panel-subtitle {
+      width: fit-content;
+      max-width: none;
+      white-space: nowrap;
+    }
+
+    .hero-title {
+      font-size: clamp(4.1rem, 6vw, 6.1rem);
+      max-width: 4.85ch;
+      line-height: 0.92;
+    }
+
+    .hero-summary {
+      max-width: 27.5rem;
+      font-size: 1.3rem !important;
+      line-height: 1.5;
+    }
+
+    .hero-coin-shell {
+      height: 126px;
+      width: 126px;
+    }
+
+    .arrow-tile {
+      height: 65.05px;
+      width: 65.05px;
+    }
+
+    .panel-column {
+      max-width: 39rem !important;
+    }
+
+    .panel-shell {
+      padding: 0.52rem !important;
+      border-radius: 30px;
+    }
+
+    .panel-card {
+      padding: 0.94rem 0.8rem 0.82rem !important;
+      border-radius: 27px;
+    }
+
+    .panel-header {
+      margin-bottom: 1rem;
+    }
+
+    .panel-brand-shell {
+      height: 44px;
+      width: 44px;
+      margin-bottom: 0.82rem;
+    }
+
+    .panel-title {
+      font-size: 1.36rem;
+      line-height: 1.04;
+    }
+
+    .panel-subtitle {
+      font-size: 0.74rem !important;
+    }
+
+    .panel-sections {
+      gap: 0.74rem;
+    }
+
+    .wallet-block {
+      border-radius: 22px;
+      padding: 0.78rem 0.78rem !important;
+    }
+
+    .wallet-section-title {
+      margin-bottom: 0.64rem;
+      font-size: 0.68rem !important;
+      letter-spacing: 0.125em;
+    }
+
+    .wallet-row {
+      border-radius: 17px;
+      padding-top: 0.56rem !important;
+      padding-bottom: 0.56rem !important;
+    }
+
+    .wallet-name {
+      font-size: 1.04rem !important;
+    }
+
+    .wallet-arrow {
+      height: 44px;
+      width: 44px;
+      border-radius: 13px;
+    }
+
+    .buy-card {
+      border-radius: 20px;
+      background: linear-gradient(180deg, #15141A 0%, #0E0D12 100%) !important;
+    }
+
+    .buy-content {
+      min-height: 72px !important;
+      padding: 0.64rem 0.86rem !important;
+    }
+
+    .buy-thumb {
+      width: 98px !important;
+    }
+
+    .buy-title {
+      font-size: 1rem !important;
+    }
+
+    .buy-payments {
+      margin-top: 0.46rem;
+      gap: 0.48rem;
+    }
+
+    /* Guide frame: show center divider, widen inset */
+    .guide-frame {
+      --gf: 1.5rem;
+    }
+
+    .gf-center-divider {
+      display: block;
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     TABLET  640px – 1023px
+     ════════════════════════════════════════════════════════════════════════════ */
+  @media (max-width: 1023px) {
+    .page-shell {
+      max-width: 760px;
+      padding: var(--gf);
+      padding-bottom: 2rem;
+    }
+
+    .desktop-stage {
+      gap: 2rem;
+      padding-top: 1.25rem;
+    }
+
+    .hero-copy {
+      max-width: 30rem;
+      margin-inline: auto;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 13vw, 5rem);
+      max-width: 4.9ch;
+      line-height: 0.92;
+      margin-inline: auto;
+    }
+
+    .hero-summary {
+      max-width: 22rem;
+      margin-inline: auto;
+      line-height: 1.14;
+    }
+
+    .hero-coin-shell {
+      height: 80px;
+      width: 80px;
+      margin-inline: auto;
+    }
+
+    .panel-column {
+      max-width: 42.84rem;
+      margin-inline: auto;
+    }
+
+    .panel-shell {
+      padding: 0.45rem !important;
+      border-radius: 28px;
+    }
+
+    .panel-shell::before {
+      display: none;
+    }
+
+    .panel-card {
+      padding: 1.04rem 0.95rem 1rem !important;
+      border-radius: 24px;
+    }
+
+    .panel-header {
+      margin-bottom: 1.06rem;
+    }
+
+    .panel-brand-shell {
+      margin-bottom: 0.76rem;
+    }
+
+    .panel-title {
+      font-size: clamp(1.28rem, 3.55vw, 1.82rem);
+      line-height: 1.05;
+    }
+
+    .panel-subtitle {
+      font-size: 0.82rem !important;
+    }
+
+    .wallet-block {
+      padding: 0.86rem !important;
+      border-radius: 20px;
+    }
+
+    .wallet-row {
+      padding-top: 0.68rem !important;
+      padding-bottom: 0.68rem !important;
+      border-radius: 16px;
+    }
+
+    .buy-content {
+      min-height: 76px !important;
+      padding: 0.76rem 0.9rem !important;
+    }
+
+    .buy-thumb {
+      width: 86px !important;
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     DESKTOP SHORT  ≥ 1024px  max-height 920px
+     ════════════════════════════════════════════════════════════════════════════ */
+  @media (min-width: 1024px) and (max-height: 920px) {
+    .page-shell {
+      padding-top: 0.8rem;
+      padding-bottom: 1rem;
+    }
+
+    .desktop-stage {
+      align-items: stretch;
+      gap: 1.5rem;
+      padding-top: 0.7rem;
+    }
+
+    .hero-copy {
+      max-width: 31rem;
+      padding-top: 0 !important;
+    }
+
+    .hero-badge {
+      margin-bottom: 0.9rem;
+      padding: 0.5rem 1.34rem 0.44rem;
+    }
+
+    .hero-title {
+      font-size: clamp(3.5rem, 5.5vw, 5.15rem) !important;
+      max-width: 4.9ch;
+    }
+
+    .hero-summary {
+      max-width: 25.25rem;
+      font-size: 0.95rem !important;
+      line-height: 1.12;
+    }
+
+    .arrow-tile {
+      height: 65.05px;
+      width: 65.05px;
+    }
+
+    .hero-coin-shell {
+      height: 104px;
+      width: 104px;
+    }
+
+    .panel-column {
+      max-width: 36.72rem !important;
+    }
+
+    .panel-shell {
+      border-radius: 28px;
+      padding: 0.5rem !important;
+    }
+
+    .panel-shell::before {
+      display: none;
+    }
+
+    .panel-card {
+      border-radius: 24px;
+      padding: 0.78rem 0.76rem 0.76rem !important;
+    }
+
+    .panel-header {
+      margin-bottom: 0.82rem;
+    }
+
+    .panel-brand-shell {
+      margin-bottom: 0.7rem;
+      height: 40px;
+      width: 40px;
+    }
+
+    .panel-title {
+      font-size: clamp(1.22rem, 1.68vw, 1.5rem);
+      line-height: 1.04;
+    }
+
+    .panel-subtitle {
+      font-size: 0.68rem !important;
+    }
+
+    .panel-sections {
+      gap: 0.54rem;
+    }
+
+    .wallet-block {
+      border-radius: 20px;
+      padding: 0.66rem 0.72rem !important;
+    }
+
+    .wallet-section-title {
+      margin-bottom: 0.58rem;
+      font-size: 0.6rem !important;
+      letter-spacing: 0.14em;
+    }
+
+    .wallet-row {
+      border-radius: 15px;
+      padding-top: 0.46rem !important;
+      padding-bottom: 0.46rem !important;
+    }
+
+    .wallet-name {
+      font-size: 0.96rem !important;
+    }
+
+    .wallet-arrow {
+      height: 36px;
+      width: 36px;
+      border-radius: 9px;
+    }
+
+    .buy-card {
+      border-radius: 16px;
+    }
+
+    .buy-content {
+      min-height: 61px !important;
+      padding: 0.54rem 0.64rem !important;
+    }
+
+    .buy-thumb {
+      width: 78px !important;
+    }
+
+    .buy-title {
+      font-size: 0.88rem !important;
+    }
+
+    .buy-payments {
+      margin-top: 0.4rem;
+      gap: 0.4rem;
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     MOBILE  < 640px
+     ════════════════════════════════════════════════════════════════════════════ */
+  @media (max-width: 639px) {
+    html,
+    body {
+      min-height: 100svh;
+      overflow: hidden;
+    }
+
+    .page-shell {
+      max-width: 100%;
+      min-height: 100svh;
+      max-height: 100svh;
+      padding: var(--gf);
+      overflow: hidden;
+    }
+
+    .page-header {
+      margin-left: 0.55rem !important;
+      margin-top: 2.2rem !important;
+      gap: 0.54rem;
+      padding-left: 0.05rem;
+    }
+
+    .desktop-stage {
+      gap: 0.48rem;
+      padding-top: 0.25rem;
+    }
+
+    .hero-copy {
+      max-width: min(100%, 19.6rem);
+      margin-inline: 0;
+      padding-bottom: 0 !important;
+      padding-top: 0 !important;
+      transform: translate(10%, 0.45rem);
+    }
+
+    .nav-brand-shell {
+      height: 1.86rem;
+      width: 1.86rem;
+      border-radius: 0.64rem;
+    }
+
+    .page-brand-text {
+      font-size: 0.98rem !important;
+      letter-spacing: -0.06em;
+    }
+
+    .hero-mark-row {
+      margin-bottom: 0.78rem !important;
+      width: fit-content;
+      margin-left: 0;
+      margin-right: 0;
+      gap: 0.66rem;
+    }
+
+    .hero-badge-wrap {
+      padding: 0.08rem 0.28rem 0.06rem;
+    }
+
+    .hero-badge-text {
+      font-size: clamp(1.95rem, 8.75vw, 2.45rem) !important;
+    }
+
+    .hero-title {
+      font-size: clamp(2.12rem, 8.4vw, 2.62rem);
+      max-width: none;
+      white-space: nowrap;
+      line-height: 0.94;
+      margin-bottom: 0.82rem !important;
+      margin-inline: 0;
+      text-align: left;
+    }
+
+    .hero-title span {
+      display: inline;
+    }
+
+    .hero-title span + span {
+      margin-left: 0.32rem;
+      margin-top: 0 !important;
+    }
+
+    .hero-summary-row {
+      align-items: flex-start;
+    }
+
+    .hero-summary {
+      max-width: min(100%, 18.9rem);
+      font-size: 0.76rem !important;
+      line-height: 1.18;
+      margin-bottom: 0.1rem !important;
+      margin-inline: 0;
+      text-align: left;
+    }
+
+    .hero-summary-break {
+      display: block;
+    }
+
+    .hero-coin-shell {
+      height: 40px;
+      width: 40px;
+      margin-left: 0.35rem;
+    }
+
+    .hero-badge {
+      padding: 0.4rem 0.92rem 0.35rem;
+    }
+
+    .panel-column {
+      max-width: min(100%, 24.4rem);
+      margin-top: 0.45rem;
+    }
+
+    .panel-shell {
+      border-radius: 22px;
+      padding: 0.36rem !important;
+    }
+
+    .panel-shell::before {
+      display: none;
+    }
+
+    .panel-card {
+      border-radius: 19px;
+      padding: 1.08rem 0.96rem 1rem !important;
+    }
+
+    .panel-brand-shell {
+      height: 35px;
+      width: 35px;
+      margin-bottom: 0.64rem;
+    }
+
+    .panel-header {
+      margin-bottom: 0.82rem;
+    }
+
+    .panel-title {
+      font-size: clamp(1rem, 4.7vw, 1.18rem);
+      line-height: 1.05;
+    }
+
+    .panel-subtitle {
+      max-width: 11.6rem;
+      font-size: 0.56rem !important;
+      margin-top: 0.22rem;
+      line-height: 1.14;
+    }
+
+    .panel-sections {
+      gap: 0.62rem;
+    }
+
+    .wallet-block {
+      border-radius: 16px;
+      padding: 0.78rem !important;
+    }
+
+    .wallet-section-title {
+      font-size: 0.52rem !important;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.11em;
+    }
+
+    .wallet-row {
+      border-radius: 14px;
+      padding-left: 0.8rem !important;
+      padding-right: 0.8rem !important;
+      padding-top: 0.58rem !important;
+      padding-bottom: 0.58rem !important;
+    }
+
+    .wallet-row > div:first-child {
+      gap: 0.6rem;
+    }
+
+    .wallet-row > div:first-child > div:first-child {
+      height: 1.18rem;
+      width: 1.18rem;
+      border-radius: 0.4rem;
+    }
+
+    .wallet-name {
+      font-size: 0.88rem !important;
+    }
+
+    .wallet-arrow {
+      height: 30px;
+      width: 30px;
+      border-radius: 8px;
+    }
+
+    .buy-content {
+      min-height: 60px !important;
+      padding: 0.58rem 0.66rem !important;
+    }
+
+    .buy-thumb {
+      width: 55px !important;
+    }
+
+    .buy-title {
+      margin-top: 0 !important;
+      font-size: 0.86rem !important;
+    }
+
+    .buy-payments {
+      margin-top: 0.18rem;
+      gap: 0.22rem;
+      flex-wrap: nowrap;
+    }
+
+    /* Guide frame: tighter inset on mobile, no center divider */
+    .guide-frame {
+      --gf: 1.25rem;
+    }
+
+    .gf-center-divider {
+      display: none !important;
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     MOBILE SMALL  < 400px
+     ════════════════════════════════════════════════════════════════════════════ */
+  @media (max-width: 399px) {
+    .page-shell {
+      padding-top: 0.7rem;
+      padding-left: 0.8rem;
+      padding-right: 0.8rem;
+    }
+
+    .hero-copy {
+      max-width: min(100%, 17.5rem);
+      transform: translate(10%, 0.38rem);
+    }
+
+    .page-header {
+      margin-left: 1.85rem !important;
+      margin-top: 0.90rem !important;
+      gap: 0.58rem;
+    }
+
+    .nav-brand-shell {
+      height: 1.85rem;
+      width: 1.85rem;
+    }
+
+    .page-brand-text {
+      font-size: 0.98rem !important;
+    }
+
+    .hero-badge-text {
+      font-size: clamp(1.82rem, 8.35vw, 2.2rem) !important;
+    }
+
+    .hero-title {
+      font-size: clamp(1.92rem, 8.2vw, 2.24rem);
+    }
+
+    .hero-summary {
+      max-width: min(100%, 16.8rem);
+      font-size: 0.69rem !important;
+    }
+
+    .panel-subtitle {
+      max-width: 9.8rem;
+    }
+
+    .buy-thumb {
+      width: 40px !important;
+    }
+
+    /* Guide frame: even tighter on tiny screens */
+    .guide-frame {
+      --gf: 1rem;
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     MOBILE SHORT  < 640px  max-height 860px
+     ════════════════════════════════════════════════════════════════════════════ */
+  @media (max-width: 639px) and (max-height: 860px) {
+    .desktop-stage {
+      gap: 0.55rem;
+      padding-top: 0.35rem;
+    }
+
+    .hero-title {
+      font-size: clamp(1.98rem, 8vw, 2.34rem);
+      margin-bottom: 0.64rem !important;
+    }
+
+    .hero-summary {
+      max-width: min(100%, 16.8rem);
+      font-size: 0.67rem !important;
+      margin-bottom: 0 !important;
+    }
+
+    .hero-coin-shell {
+      height: 36px;
+      width: 36px;
+    }
+
+    .hero-mark-row {
+      margin-bottom: 0.54rem !important;
+      gap: 0.56rem;
+    }
+
+    .page-shell {
+      padding-top: 0.48rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .panel-card {
+      padding: 0.62rem 0.52rem 0.56rem !important;
+    }
+
+    .panel-header {
+      margin-bottom: 0.42rem;
+    }
+
+    .panel-title {
+      font-size: clamp(0.9rem, 4.15vw, 1.02rem);
+    }
+
+    .panel-subtitle {
+      max-width: 9.6rem;
+      font-size: 0.5rem !important;
+    }
+
+    .wallet-block {
+      padding: 0.48rem !important;
+    }
+
+    .wallet-row {
+      padding-top: 0.3rem !important;
+      padding-bottom: 0.3rem !important;
+    }
+
+    .wallet-name {
+      font-size: 0.76rem !important;
+    }
+
+    .wallet-arrow {
+      height: 24px;
+      width: 24px;
+    }
+
+    .buy-content {
+      min-height: 45px !important;
+      padding: 0.36rem 0.42rem !important;
+    }
+
+    .buy-title {
+      font-size: 0.72rem !important;
+    }
+
+    .buy-thumb {
+      width: 40px !important;
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     MOBILE VERY SHORT  < 640px  max-height 760px
+     ════════════════════════════════════════════════════════════════════════════ */
+  @media (max-width: 639px) and (max-height: 760px) {
+    .desktop-stage {
+      gap: 0.38rem;
+      padding-top: 0.18rem;
+    }
+
+    .panel-column {
+      max-width: min(100%, 20.9rem);
+      margin-top: 0.22rem;
+    }
+
+    .panel-shell {
+      padding: 0.28rem !important;
+    }
+
+    .panel-card {
+      padding: 0.68rem 0.62rem 0.62rem !important;
+    }
+
+    .panel-brand-shell {
+      height: 30px;
+      width: 30px;
+      margin-bottom: 0.44rem;
+    }
+
+    .panel-header {
+      margin-bottom: 0.48rem;
+    }
+
+    .panel-title {
+      font-size: 0.94rem !important;
+    }
+
+    .panel-subtitle {
+      max-width: 10rem;
+      font-size: 0.5rem !important;
+      margin-top: 0.16rem;
+    }
+
+    .panel-sections {
+      gap: 0.42rem;
+    }
+
+    .gf-dot {
+      display: none;
+    }
+
+    .wallet-block {
+      padding: 0.56rem !important;
+    }
+
+    .wallet-section-title {
+      font-size: 0.5rem !important;
+      margin-bottom: 0.34rem;
+    }
+
+    .wallet-row {
+      padding-left: 0.68rem !important;
+      padding-right: 0.68rem !important;
+      padding-top: 0.38rem !important;
+      padding-bottom: 0.38rem !important;
+    }
+
+    .wallet-name {
+      font-size: 0.8rem !important;
+    }
+
+    .wallet-arrow {
+      height: 26px;
+      width: 26px;
+    }
+
+    .buy-content {
+      min-height: 49px !important;
+      padding: 0.4rem 0.48rem !important;
+    }
+
+    .buy-thumb {
+      width: 44px !important;
+    }
+
+    .buy-title {
+      font-size: 0.76rem !important;
+    }
+  }
 }
