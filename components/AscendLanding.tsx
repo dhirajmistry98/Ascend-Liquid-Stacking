@@ -1,18 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-
-type BlobConfig = {
-  x: number;
-  y: number;
-  radius: number;
-  speed: number;
-  alpha: number;
-  color: string;
-  phase: number;
-  stretchX: number;
-  stretchY: number;
-};
+import React from "react";
 
 type WalletEntry = {
   name: string;
@@ -91,9 +79,9 @@ const icons = {
       <path d="M24.6979 19.9243L23.5583 15.6992H21.1076L21.0986 17.9218L17.7183 18.7517L16.7266 21.3032L17.2363 21.8651L19.812 19.9235H24.6979V19.9243Z" fill="#FF8D5D" />
       <path d="M17.7075 11.1611H16.001H14.2945L14.0625 13.538L15.2723 21.3013H16.7297L17.9403 13.538L17.7075 11.1611Z" fill="#FF8D5D" />
       <path d="M8.43645 7.7002L7.29688 12.1275L8.43645 15.6997H10.8872L14.0576 13.5405L8.43645 7.7002Z" fill="#661800" />
-      <path d="M13.8475 17.6375H12.7373L12.1328 18.2238L14.2805 18.7509L13.8475 17.6367V17.6375Z" fill="#661800" />
+      <path d="M13.8475 17.6375H12.7373L12.1328 18.2238L14.2805 18.7509L13.8475 17.6367V17.6367Z" fill="#661800" />
       <path d="M23.5586 7.7002L24.6982 12.1275L23.5586 15.6997H21.1079L17.9375 13.5405L23.5586 7.7002Z" fill="#661800" />
-      <path d="M18.1525 17.6375H19.2643L19.8688 18.2247L17.7188 18.7525L18.1525 17.6367V17.6375Z" fill="#661800" />
+      <path d="M18.1525 17.6375H19.2643L19.8688 18.2247L17.7188 18.7525L18.1525 17.6367V17.6367Z" fill="#661800" />
       <path d="M16.9822 22.7842L17.2355 21.8666L16.7257 21.3047H15.2676L14.7578 21.8666L15.0111 22.7842" fill="#661800" />
       <path d="M16.9868 22.7852V24.3005H15.0156V22.7852H16.9868Z" fill="#C0C4CD" />
       <path d="M12.1875 22.6255L15.0164 24.2991V22.7839L14.7632 21.8662L12.1875 22.6255Z" fill="#E7EBF6" />
@@ -127,279 +115,19 @@ const swapWallets: WalletEntry[] = [
   { name: "Phantom", icon: icons.phantom },
 ];
 
-const blobs: BlobConfig[] = [
-  {
-    x: 1.02,
-    y: 1.02,
-    radius: 0.7,
-    speed: 0.04,
-    alpha: 1.0,
-    color: "#FF1200",
-    phase: 0.8,
-    stretchX: 1.35,
-    stretchY: 1.2,
-  },
-  {
-    x: 0.9,
-    y: 0.9,
-    radius: 0.5,
-    speed: 0.055,
-    alpha: 0.68,
-    color: "#E01000",
-    phase: 1.6,
-    stretchX: 1.3,
-    stretchY: 1.15,
-  },
-  {
-    x: 0.68,
-    y: 0.72,
-    radius: 0.48,
-    speed: 0.06,
-    alpha: 0.22,
-    color: "#880606",
-    phase: 3.2,
-    stretchX: 1.5,
-    stretchY: 1.2,
-  },
-];
-
 export default function AscendLanding() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const noiseCanvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const noiseCanvas = noiseCanvasRef.current;
-    if (!canvas || !noiseCanvas) return;
-
-    const context = canvas.getContext("2d");
-    const noiseContext = noiseCanvas.getContext("2d");
-    if (!context || !noiseContext) return;
-
-    const radialInfluence = (
-      x: number,
-      y: number,
-      cx: number,
-      cy: number,
-      r: number
-    ): number => Math.max(0, 1 - Math.hypot(x - cx, y - cy) / r);
-
-    const renderNoise = () => {
-      // Use a smaller buffer for noise and let image-rendering: pixelated handle the look
-      // This is MUCH faster than rendering every pixel at native resolution
-      const scale = 0.5;
-      const w = Math.ceil(noiseCanvas.width * scale);
-      const h = Math.ceil(noiseCanvas.height * scale);
-      if (w <= 0 || h <= 0) return;
-
-      const offscreen = document.createElement("canvas");
-      offscreen.width = w;
-      offscreen.height = h;
-      const offCtx = offscreen.getContext("2d");
-      if (!offCtx) return;
-
-      const imageData = offCtx.createImageData(w, h);
-      const data = imageData.data;
-
-      for (let y = 0; y < h; y++) {
-        for (let x = 0; x < w; x++) {
-          const idx = (y * w + x) * 4;
-          const nx = x / w;
-          const ny = y / h;
-
-          const corner = radialInfluence(nx, ny, 1.0, 1.0, 0.8);
-          const midWarm = radialInfluence(nx, ny, 0.65, 0.7, 0.72) * 0.22;
-          const ambient = radialInfluence(nx, ny, 0.5, 0.5, 1.2) * 0.06;
-
-          const brightness = corner * 1.4 + midWarm * 0.6 + ambient;
-
-          const s = Math.random();
-          let r = 0, g = 0, b = 0, a = 0;
-
-          if (s < 0.5) {
-            r = 3 + brightness * 36 + Math.random() * 12;
-            g = 0 + brightness * 2 + Math.random() * 2;
-            b = 0 + brightness * 2 + Math.random() * 2;
-            a = 155 + brightness * 48 + Math.random() * 28;
-          } else if (s < 0.91) {
-            r = 120 + brightness * 135 + Math.random() * 50;
-            g = 10 + brightness * 45 + Math.random() * 18;
-            b = 0 + brightness * 8 + Math.random() * 6;
-            a = 100 + brightness * 82 + Math.random() * 26;
-          } else {
-            r = 170 + brightness * 82 + Math.random() * 22;
-            g = 7 + brightness * 14 + Math.random() * 7;
-            b = 4 + brightness * 9 + Math.random() * 5;
-            a = 115 + brightness * 95 + Math.random() * 26;
-          }
-
-          data[idx] = Math.min(255, r);
-          data[idx + 1] = Math.min(255, g);
-          data[idx + 2] = Math.min(255, b);
-          data[idx + 3] = Math.min(255, a);
-        }
-      }
-      offCtx.putImageData(imageData, 0, 0);
-
-      noiseContext.clearRect(0, 0, noiseCanvas.width, noiseCanvas.height);
-      noiseContext.drawImage(offscreen, 0, 0, noiseCanvas.width, noiseCanvas.height);
-    };
-
-    const resizeCanvas = () => {
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-
-      canvas.width = Math.floor(w * ratio);
-      canvas.height = Math.floor(h * ratio);
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      context.setTransform(ratio, 0, 0, ratio, 0, 0);
-
-      noiseCanvas.width = Math.floor(w * (window.devicePixelRatio || 1));
-      noiseCanvas.height = Math.floor(h * (window.devicePixelRatio || 1));
-      noiseCanvas.style.width = `${w}px`;
-      noiseCanvas.style.height = `${h}px`;
-
-      renderNoise();
-    };
-
-    const withAlpha = (hex: string, alpha: number): string => {
-      const a = Math.max(0, Math.min(alpha, 1));
-      const n = hex.replace("#", "");
-      if (n.length !== 6) return `rgba(255,255,255,${a})`;
-      return `rgba(${parseInt(n.slice(0, 2), 16)},${parseInt(n.slice(2, 4), 16)},${parseInt(n.slice(4, 6), 16)},${a})`;
-    };
-
-    let animationFrameId: number;
-    const drawBackground = (time: number) => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const t = time * 0.001;
-
-      context.clearRect(0, 0, w, h);
-
-      context.fillStyle = "#010000";
-      context.fillRect(0, 0, w, h);
-
-      const midField = context.createRadialGradient(
-        w * 0.5, h * 0.58, 0,
-        w * 0.5, h * 0.5, Math.max(w, h) * 1.15
-      );
-      midField.addColorStop(0, "rgba(65, 5, 2, 0.58)");
-      midField.addColorStop(0.4, "rgba(44, 3, 1, 0.32)");
-      midField.addColorStop(0.7, "rgba(22, 1, 0, 0.14)");
-      midField.addColorStop(1, "rgba(0,  0, 0, 0)");
-      context.fillStyle = midField;
-      context.fillRect(0, 0, w, h);
-
-      const cornerGlow = context.createRadialGradient(
-        w * 1.0, h * 1.0, 0,
-        w * 0.84, h * 0.84, Math.max(w, h) * 0.6
-      );
-      cornerGlow.addColorStop(0, "rgba(255, 80, 20, 1.0)");
-      cornerGlow.addColorStop(0.1, "rgba(255, 60, 10, 0.95)");
-      cornerGlow.addColorStop(0.08, "rgba(255, 30, 8, 0.95)");
-      cornerGlow.addColorStop(0.1, "rgba(245, 10, 0, 0.90)");
-      cornerGlow.addColorStop(0.25, "rgba(205,  7, 0, 0.60)");
-      cornerGlow.addColorStop(0.45, "rgba(135,  4, 0, 0.28)");
-      cornerGlow.addColorStop(0.65, "rgba( 65,  2, 0, 0.10)");
-      cornerGlow.addColorStop(1, "rgba(  0,  0, 0, 0)");
-      context.fillStyle = cornerGlow;
-      context.fillRect(0, 0, w, h);
-
-      const extraGlow = context.createRadialGradient(
-        w * 1.05, h * 1.05, 0,
-        w * 0.92, h * 0.92, Math.max(w, h) * 0.35
-      );
-      extraGlow.addColorStop(0, "rgba(255, 220, 140, 0.95)");
-      extraGlow.addColorStop(0.2, "rgba(255, 120, 50, 0.42)");
-      extraGlow.addColorStop(0.4, "rgba(255, 60, 20, 0.22)");
-      extraGlow.addColorStop(0.65, "rgba(255, 20, 5, 0.08)");
-      extraGlow.addColorStop(1, "rgba(  0,  0, 0, 0)");
-      context.fillStyle = extraGlow;
-      context.fillRect(0, 0, w, h);
-
-      context.save();
-      context.globalCompositeOperation = "screen";
-      context.filter = "blur(125px)";
-
-      blobs.forEach((blob) => {
-        const ox = Math.sin(t * blob.speed + blob.phase) * w * 0.025;
-        const oy = Math.cos(t * (blob.speed + 0.03) + blob.phase) * h * 0.028;
-        const cx = blob.x * w + ox;
-        const cy = blob.y * h + oy;
-        const radius = blob.radius * Math.max(w, h);
-
-        context.save();
-        context.translate(cx, cy);
-        context.scale(blob.stretchX, blob.stretchY);
-
-        const g = context.createRadialGradient(0, 0, radius * 0.04, 0, 0, radius);
-        g.addColorStop(0, withAlpha(blob.color, blob.alpha));
-        g.addColorStop(0.4, withAlpha(blob.color, blob.alpha * 0.55));
-        g.addColorStop(1, withAlpha(blob.color, 0));
-
-        context.fillStyle = g;
-        context.beginPath();
-        context.arc(0, 0, radius, 0, Math.PI * 2);
-        context.fill();
-        context.restore();
-      });
-
-      context.restore();
-
-      const topBlackout = context.createLinearGradient(0, 0, 0, h * 0.32);
-      topBlackout.addColorStop(0, "rgba(0, 0, 0, 0.88)");
-      topBlackout.addColorStop(0.55, "rgba(0, 0, 0, 0.45)");
-      topBlackout.addColorStop(1, "rgba(0, 0, 0, 0)");
-      context.fillStyle = topBlackout;
-      context.fillRect(0, 0, w, h);
-
-      const leftBlackout = context.createLinearGradient(0, 0, w * 0.52, 0);
-      leftBlackout.addColorStop(0, "rgba(0, 0, 0, 0.82)");
-      leftBlackout.addColorStop(0.45, "rgba(0, 0, 0, 0.40)");
-      leftBlackout.addColorStop(1, "rgba(0, 0, 0, 0)");
-      context.fillStyle = leftBlackout;
-      context.fillRect(0, 0, w, h);
-
-      const topRightBlackout = context.createRadialGradient(
-        w * 1.0, 0, 0,
-        w * 0.85, h * 0.08, Math.max(w, h) * 0.55
-      );
-      topRightBlackout.addColorStop(0, "rgba(0, 0, 0, 0.35)");
-      topRightBlackout.addColorStop(0.5, "rgba(0, 0, 0, 0.15)");
-      topRightBlackout.addColorStop(1, "rgba(0, 0, 0, 0)");
-      context.fillStyle = topRightBlackout;
-      context.fillRect(0, 0, w, h);
-
-      const vignette = context.createRadialGradient(
-        w * 0.6, h * 0.62, 0,
-        w * 0.5, h * 0.5, Math.max(w, h) * 0.88
-      );
-      vignette.addColorStop(0, "rgba(0, 0, 0, 0)");
-      vignette.addColorStop(0.4, "rgba(0, 0, 0, 0.15)");
-      vignette.addColorStop(1, "rgba(0, 0, 0, 0.85)");
-      context.fillStyle = vignette;
-      context.fillRect(0, 0, w, h);
-
-      animationFrameId = window.requestAnimationFrame(drawBackground);
-    };
-
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-    animationFrameId = window.requestAnimationFrame(drawBackground);
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      window.cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
-
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#030101] text-white">
-      <canvas ref={canvasRef} id="gradient-canvas" className="fixed inset-0 h-full w-full"></canvas>
-      <canvas ref={noiseCanvasRef} id="noise-canvas" className="noise-canvas fixed inset-0 h-full w-full pointer-events-none"></canvas>
+      <div className="fixed inset-0 z-0 h-full w-full pointer-events-none">
+        <img
+          src="/assets/background.gif"
+          alt="Background"
+          className="h-full w-full object-cover"
+        />
+        {/* Cinematic dark overlays to maintain readability and atmosphere */}
+        <div className="absolute inset-0 bg-black/55"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.6)_100%)]"></div>
+      </div>
 
       {/* ── GUIDE FRAME: full-screen border treatment ── */}
       <div className="guide-frame pointer-events-none fixed inset-0 z-20">
@@ -426,13 +154,13 @@ export default function AscendLanding() {
       </div>
 
       <main className="page-shell relative z-10 mx-auto flex min-h-screen w-full flex-col">
-        <header className="page-header flex items-center gap-3 text-white/95 sm:gap-3.5 mt-4 translate-x-[4%]">
+        <header className="page-header flex items-center gap-3 text-white/95 sm:gap-3.5 mt-4">
           <div className="nav-brand-shell h-7 w-7 shrink-0 sm:h-8 sm:w-8">{icons.navLogo}</div>
           <span className="page-brand-text text-[20px] font-medium tracking-[-0.055em] text-white/92 hero-type-glow sm:text-[22px]">Ascend</span>
         </header>
 
         <section className="desktop-stage grid flex-1 grid-cols-1 gap-8 pt-8 sm:gap-10 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(388px,428px)] lg:items-stretch lg:gap-9 xl:grid-cols-[minmax(0,1fr)_minmax(408px,449px)] xl:pt-10 2xl:grid-cols-[minmax(0,1fr)_minmax(428px,469px)]">
-          <div className="order-1 flex h-full items-center lg:items-end lg:pl-8 lg:translate-x-[14%] xl:pl-12 xl:translate-x-[16%] 2xl:pl-14 2xl:translate-x-[18%]">
+          <div className="order-1 flex h-full items-center lg:items-end lg:pl-8 xl:pl-12 2xl:pl-14">
             <div className="hero-copy relative mx-0 w-full max-w-[352px] pb-2 pt-4 lg:mx-0 lg:max-w-[34rem] lg:pb-8 lg:pt-6 xl:max-w-[36rem] xl:pb-10 xl:pt-8 2xl:max-w-[38rem]">
               <div className="mb-6 text-left sm:mb-8 lg:mb-10 lg:text-left">
                 <div className="hero-mark-row mb-4 flex flex-col items-start justify-start gap-3 sm:mb-5 lg:mb-4 lg:block">
@@ -470,7 +198,7 @@ export default function AscendLanding() {
             </div>
           </div>
 
-          <div className="panel-column order-2 w-full lg:ml-auto lg:max-w-[367px] lg:translate-x-[-5.5rem] lg:translate-y-6 xl:max-w-[388px] xl:translate-x-[-10rem] xl:translate-y-8 2xl:max-w-[408px] 2xl:translate-x-[-11rem] 2xl:translate-y-9">
+          <div className="panel-column order-2 w-full lg:ml-auto lg:max-w-[367px] lg:translate-y-6 xl:max-w-[388px] xl:translate-y-8 2xl:max-w-[408px] 2xl:translate-y-9">
             <div className="panel-shell relative rounded-[28px] p-1.5 sm:p-2">
               <div className="panel-card relative rounded-[24px] bg-[radial-gradient(circle_at_50%_0%,rgba(100,20,20,0.35),rgba(40,10,10,0.88)_35%,rgba(15,5,5,0.96)_60%,rgba(8,3,3,1)_100%)] px-4 pb-1 pt-1.5 shadow-[0_24px_48px_rgba(0,0,0,0.5)] sm:px-5 sm:pb-1 md:px-6 md:pb-1.5">
                 <div className="panel-header mb-1 flex flex-col items-center text-center">
