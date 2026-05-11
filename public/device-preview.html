@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Device Preview</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #0b0b0d;
+        color: #fff;
+        font-family: system-ui, sans-serif;
+      }
+
+      h1 {
+        margin: 0 0 14px;
+        font-size: 18px;
+      }
+
+      .frame {
+        display: inline-flex;
+        flex-direction: column;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        background: #151519;
+        padding: 14px;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .viewport {
+        width: calc(var(--frame-width) * var(--frame-scale));
+        height: calc(var(--frame-height) * var(--frame-scale));
+        overflow-x: hidden;
+        overflow-y: auto;
+        border-radius: 12px;
+        background: #000;
+        scrollbar-gutter: stable;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .content {
+        width: var(--frame-width);
+        height: var(--frame-height);
+        transform: scale(var(--frame-scale));
+        transform-origin: top left;
+      }
+
+      iframe {
+        display: block;
+        border: 0;
+        border-radius: 12px;
+        background: #000;
+        width: var(--frame-width);
+        height: var(--frame-height);
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 14px;
+        }
+
+        .frame {
+          padding: 10px;
+          border-radius: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="title">Device Preview</h1>
+    <div class="frame">
+      <div class="viewport">
+        <div class="content">
+          <iframe id="preview" src="/" loading="eager"></iframe>
+        </div>
+      </div>
+    </div>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const width = Number(params.get("width") || 390);
+      const height = Number(params.get("height") || 844);
+      const requestedScale = Number(params.get("scale") || 0);
+      const label = params.get("label") || `${width}x${height}`;
+      const title = document.getElementById("title");
+      const preview = document.getElementById("preview");
+      const maxViewportWidth = Math.max(240, window.innerWidth - 80);
+      const autoScale = Math.min(1, maxViewportWidth / width);
+      const scale = requestedScale > 0 ? requestedScale : autoScale;
+      title.textContent = label;
+      document.documentElement.style.setProperty("--frame-width", `${width}px`);
+      document.documentElement.style.setProperty("--frame-height", `${height}px`);
+      document.documentElement.style.setProperty("--frame-scale", String(scale));
+      preview.width = width;
+      preview.height = height;
+    </script>
+  </body>
+</html>

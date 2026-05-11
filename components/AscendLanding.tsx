@@ -1,271 +1,264 @@
 "use client";
 
-import React from "react";
-
-type WalletEntry = {
-  name: string;
-  icon: React.ReactNode;
-};
+import React, { useState } from "react";
 
 const icons = {
   navLogo: (
-    <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect width="52" height="52" rx="11.375" fill="white" />
-      <path d="M39.3125 40.7598H36.252L31.9082 29.3018L31.2578 27.5986C25.4431 26.6699 21.1536 29.4247 19.2139 31.4248L19.0439 31.8662L15.6523 40.7598H12.6328L24.1729 11.1836H27.7725L39.3125 40.7598ZM20.6768 27.6133C23.0969 26.1481 26.4121 25.0072 30.4043 25.3643L25.9521 13.707L20.6768 27.6133Z" fill="#F35233" />
-    </svg>
+    <img src="/assets/logo.svg" alt="Ascend" className="h-full w-full object-contain" />
   ),
   heroLogo: (
     <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect width="52" height="52" rx="14" fill="#f35233" />
+      <rect width="52" height="52" rx="14" fill="#F35233" />
       <path d="M39.3125 40.7598H36.252L31.9082 29.3018L31.2578 27.5986C25.4431 26.6699 21.1536 29.4247 19.2139 31.4248L19.0439 31.8662L15.6523 40.7598H12.6328L24.1729 11.1836H27.7725L39.3125 40.7598ZM20.6768 27.6133C23.0969 26.1481 26.4121 25.0072 30.4043 25.3643L25.9521 13.707L20.6768 27.6133Z" fill="white" />
     </svg>
   ),
-  arrow: (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M5.4 18.6L18 6" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
-      <path d="M7.8 6H18V16.2" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ),
   chevron: (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ),
-  eternl: (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect width="40" height="40" rx="12" fill="url(#eternlBg)" />
-      <path d="M12.6 12.8H27.4V27.2H12.6V12.8Z" stroke="#FF6B45" strokeWidth="2.2" strokeLinejoin="round" />
-      <path d="M15.8 16.2H23.9" stroke="#2EE6FF" strokeWidth="2.1" strokeLinecap="round" />
-      <path d="M15.8 20H22.4" stroke="#FFBA59" strokeWidth="2.1" strokeLinecap="round" />
-      <path d="M15.8 23.8H23.9" stroke="#C267FF" strokeWidth="2.1" strokeLinecap="round" />
-      <defs>
-        <linearGradient id="eternlBg" x1="3.5" y1="2.5" x2="36" y2="37" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#7725E7" />
-          <stop offset="0.5" stopColor="#42209B" />
-          <stop offset="1" stopColor="#0D0B1F" />
-        </linearGradient>
-      </defs>
-    </svg>
-  ),
-  lace: (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect width="40" height="40" rx="12" fill="#4A1389" />
-      <circle cx="20" cy="20" r="9.6" stroke="#FFC454" strokeWidth="2" />
-      <path d="M25 26C22.1 22.8 20.4 20 20.4 16.8C20.4 14.5 21.2 12.5 22.8 10.7" stroke="#FFC454" strokeWidth="2" strokeLinecap="round" />
-      <path d="M13.8 24.2C13.8 18.6 17.8 14 23 14" stroke="#A45DFF" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  ),
-  vespr: (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect width="40" height="40" rx="12" fill="#2A66C6" />
-      <path d="M10.5 14L20 25.5L29.5 14" stroke="#D9ECFF" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ),
-  metamask: (
-    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M0 10C0 4.47715 4.47715 0 10 0H22C27.5228 0 32 4.47715 32 10V22C32 27.5228 27.5228 32 22 32H10C4.47715 32 0 27.5228 0 22V10Z" fill="#FF6518" fillOpacity="0.67" />
-      <path d="M23.5573 23.7318L19.8094 22.6274L16.9829 24.2994L15.0109 24.2986L12.1828 22.6274L8.43645 23.7318L7.29688 19.9249L8.43645 15.6997L7.29688 12.1275L8.43645 7.7002L14.2904 11.1612H17.7034L23.5573 7.7002L24.6969 12.1275L23.5573 15.6997L24.6969 19.9249L23.5573 23.7318Z" fill="#FF5C16" />
-      <path d="M8.4375 7.7002L14.2914 11.1636L14.0586 13.5405L8.4375 7.7002Z" fill="#FF5C16" />
-      <path d="M12.1797 19.9268L14.7554 21.8684L12.1797 22.6277V19.9268Z" fill="#FF5C16" />
-      <path d="M14.5561 16.7163L14.061 13.542L10.8922 15.7004L10.8906 15.6996V15.7012L10.9004 17.923L12.1854 16.7163H12.1862H14.5561Z" fill="#FF5C16" />
-      <path d="M23.557 7.7002L17.7031 11.1636L17.9351 13.5405L23.557 7.7002Z" fill="#FF5C16" />
-      <path d="M19.8101 19.9268L17.2344 21.8684L19.8101 22.6277V19.9268Z" fill="#FF5C16" />
-      <path d="M21.1021 15.7012V15.6996L21.1013 15.7004L17.9325 13.542L17.4375 16.7163H19.8073L21.0931 17.923L21.1021 15.7012Z" fill="#FF5C16" />
-      <path d="M12.1828 22.6267L8.43645 23.7311L7.29688 19.9258H12.1828V22.6267Z" fill="#E34807" />
-      <path d="M14.5549 16.7158L15.2705 21.3047L14.2788 18.7533L10.8984 17.9233L12.1843 16.7158H14.5541H14.5549Z" fill="#E34807" />
-      <path d="M19.8125 22.6267L23.5588 23.7311L24.6984 19.9258H19.8125V22.6267Z" fill="#E34807" />
-      <path d="M17.4422 16.7158L16.7266 21.3047L17.7183 18.7533L21.0986 17.9233L19.812 16.7158H17.4422Z" fill="#E34807" />
-      <path d="M7.29688 19.9243L8.43645 15.6992H10.8872L10.8961 17.9218L14.2765 18.7517L15.2682 21.3032L14.7585 21.8651L12.1828 19.9235H7.29688V19.9243Z" fill="#FF8D5D" />
-      <path d="M24.6979 19.9243L23.5583 15.6992H21.1076L21.0986 17.9218L17.7183 18.7517L16.7266 21.3032L17.2363 21.8651L19.812 19.9235H24.6979V19.9243Z" fill="#FF8D5D" />
-      <path d="M17.7075 11.1611H16.001H14.2945L14.0625 13.538L15.2723 21.3013H16.7297L17.9403 13.538L17.7075 11.1611Z" fill="#FF8D5D" />
-      <path d="M8.43645 7.7002L7.29688 12.1275L8.43645 15.6997H10.8872L14.0576 13.5405L8.43645 7.7002Z" fill="#661800" />
-      <path d="M13.8475 17.6375H12.7373L12.1328 18.2238L14.2805 18.7509L13.8475 17.6367V17.6367Z" fill="#661800" />
-      <path d="M23.5586 7.7002L24.6982 12.1275L23.5586 15.6997H21.1079L17.9375 13.5405L23.5586 7.7002Z" fill="#661800" />
-      <path d="M18.1525 17.6375H19.2643L19.8688 18.2247L17.7188 18.7525L18.1525 17.6367V17.6367Z" fill="#661800" />
-      <path d="M16.9822 22.7842L17.2355 21.8666L16.7257 21.3047H15.2676L14.7578 21.8666L15.0111 22.7842" fill="#661800" />
-      <path d="M16.9868 22.7852V24.3005H15.0156V22.7852H16.9868Z" fill="#C0C4CD" />
-      <path d="M12.1875 22.6255L15.0164 24.2991V22.7839L14.7632 21.8662L12.1875 22.6255Z" fill="#E7EBF6" />
-      <path d="M19.8133 22.6255L16.9844 24.2991V22.7839L17.2376 21.8662L19.8133 22.6255Z" fill="#E7EBF6" />
-    </svg>
-  ),
-  phantom: (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect width="40" height="40" rx="12" fill="#B4A9F3" />
-      <path d="M11.7 24.2C11.7 18.3 15.5 14.2 20.1 14.2C24.6 14.2 28.4 18.3 28.4 24.2C28.4 25.1 27.7 25.8 26.8 25.8C25.8 25.8 25 25.1 24.9 24.1C24.3 25.1 22.8 25.8 21.3 25.8C20.1 25.8 19 25.3 18.3 24.5C17.6 25.3 16.5 25.8 15.3 25.8C13.8 25.8 12.4 25.1 11.8 24.1C11.8 24.1 11.7 24.1 11.7 24.2Z" fill="white" />
-      <circle cx="16.1" cy="20.3" r="1.25" fill="#7B69D6" />
-      <circle cx="24" cy="20.3" r="1.25" fill="#7B69D6" />
-      <path d="M15.3 22.8C16.4 23.6 17.9 24 19.8 24C21.5 24 23 23.6 24.2 22.8" stroke="#7B69D6" strokeWidth="1.5" strokeLinecap="round" />
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   apple: (
-    <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="h-4 w-4">
-      <path d="M12.182 8.635c.017 1.882 1.634 2.513 1.65 2.522-.012.041-.26 0.884-.856 1.76-.515.748-1.053 1.492-1.892 1.508-.825.015-1.09-.485-2.036-.485-.945 0-1.24.47-2.02.5-.811.03-1.428-.809-1.946-1.558-1.058-1.53-1.868-4.32-1.39-6.398.238-1.03.82-1.743 1.486-2.04.59-.264 1.15-.45 1.73-.45.626 0 1.217.432 1.603.432.384 0 1.08-.535 1.84-.458.318.013 1.212.128 1.787.97-.046.03-.896.522-.896 1.56.015 1.258 1.077 1.69 1.1 1.7zM10.15 2.92c.348-.423.584-1.01.52-1.597-.504.02-1.116.335-1.478.758-.324.378-.607.97-.53 1.54.56.044 1.14-.277 1.488-.7z" />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.05 20.28c-.96.95-2.22 1.72-3.71 1.72-1.45 0-2.07-.88-3.69-.88-1.64 0-2.3.86-3.64.86-1.39 0-2.6-.74-3.51-1.63-1.89-1.85-2.88-5.32-2.88-8.23 0-3.32 2.05-5.08 4.02-5.08 1.07 0 1.95.44 2.85.44.83 0 1.48-.44 2.81-.44 1.71 0 3.19.9 3.99 2.19-3.41 1.63-2.87 6.44.56 8.07zM12.03 5.4c0-2.31 1.89-4.22 4.19-4.22.18 2.5-2.3 4.65-4.19 4.22z" />
     </svg>
   ),
 };
 
+type WalletEntry = { name: string; icon: string | React.ReactNode; isCardano?: boolean };
+
 const cardanoWallets: WalletEntry[] = [
-  { name: "Eternl", icon: icons.eternl },
-  { name: "Lace", icon: icons.lace },
-  { name: "Vespr", icon: icons.vespr },
+  { name: "Cardano", icon: "/assets/cardano.svg", isCardano: true },
 ];
 
 const swapWallets: WalletEntry[] = [
-  { name: "Metamask", icon: icons.metamask },
-  { name: "Phantom", icon: icons.phantom },
+  { name: "Metamask", icon: "/assets/meta.svg" },
+  { name: "Phantom", icon: "/assets/phantom.svg" },
+];
+
+const connectWallets = [
+  { name: "Eternl", icon: "/assets/Eternl.svg" },
+  { name: "Lace", icon: "/assets/lace.svg" },
+  { name: "Vespr", icon: "/assets/vespr.svg" },
 ];
 
 export default function AscendLanding() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#030101] text-white">
-      <div className="fixed inset-0 z-0 h-full w-full pointer-events-none">
-        <img
-          src="/assets/background.gif"
-          alt="Background"
-          className="h-full w-full object-cover"
-        />
-        {/* Cinematic dark overlays to maintain readability and atmosphere */}
-        <div className="absolute inset-0 bg-black/55"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.6)_100%)]"></div>
+    <div className="relative min-h-screen w-full overflow-x-hidden">
+      {/* ── BACKGROUND: Applied via direct style for absolute reliability ── */}
+      <div 
+        className="fixed inset-0 z-0 h-full w-full pointer-events-none"
+        style={{
+          backgroundImage: 'url("/assets/background.gif")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="scanline"></div>
       </div>
 
-      {/* ── GUIDE FRAME: full-screen border treatment ── */}
-      <div className="guide-frame pointer-events-none fixed inset-0 z-20">
-        {/* Top edge line & center dot */}
-        <span className="gf-line gf-top"></span>
-        <span className="gf-dot gf-dot-top-center"></span>
+      {/* ── STRUCTURAL GUIDES: Now visible on all devices ── */}
+      <div className="structural-guides pointer-events-none fixed inset-0 z-20">
+        <span className="sg-line sg-h sg-top" style={{ animationDelay: '2s' }}></span>
+        <span className="sg-line sg-h sg-bottom" style={{ animationDelay: '2s' }}></span>
 
-        {/* Bottom edge line & center dot */}
-        <span className="gf-line gf-bottom"></span>
-        <span className="gf-dot gf-dot-bottom-center"></span>
+        <span className="sg-line sg-v sg-x-left" style={{ animationDelay: '2s' }}></span>
+        <span className="sg-line sg-v sg-x-center hidden sm:block" style={{ animationDelay: '2s' }}></span>
+        <span className="sg-line sg-v sg-x-right sg-v-rev" style={{ animationDelay: '2s' }}></span>
 
-        {/* Left & right vertical edges */}
-        <span className="gf-line gf-left"></span>
-        <span className="gf-line gf-right"></span>
+        <GuideDiamond className="sg-y-top sg-x-left" />
+        <GuideDiamond className="sg-y-top sg-x-center hidden sm:block" />
+        <GuideDiamond className="sg-y-top sg-x-right" />
 
-        {/* Four corner diamonds */}
-        <GuideDiamond className="top-[var(--gf)] left-[var(--gf)]" />
-        <GuideDiamond className="top-[var(--gf)] right-[var(--gf)] translate-x-1/2" />
-        <GuideDiamond className="bottom-[var(--gf)] left-[var(--gf)]" />
-        <GuideDiamond className="bottom-[var(--gf)] right-[var(--gf)] translate-x-1/2" />
-
-        {/* Desktop only: vertical center divider */}
-        <span className="gf-line gf-center-divider"></span>
+        <GuideDiamond className="sg-y-bottom sg-x-left" />
+        <GuideDiamond className="sg-y-bottom sg-x-center hidden sm:block" />
+        {/* Synchronized Moving Laser Streaks (Delayed 2s) */}
+        <div className="gf-laser gf-laser-h sg-y-top" style={{ animationDelay: '2s' }}>
+          <div className="gf-laser-head"></div>
+        </div>
+        <div className="gf-laser gf-laser-h sg-y-bottom" style={{ animationDelay: '2s' }}>
+          <div className="gf-laser-head"></div>
+        </div>
+        <div className="gf-laser gf-laser-v sg-x-left" style={{ animationDelay: '2s' }}>
+          <div className="gf-laser-head"></div>
+        </div>
+        <div className="gf-laser gf-laser-v sg-x-center hidden sm:block" style={{ animationDelay: '2s' }}>
+          <div className="gf-laser-head"></div>
+        </div>
+        <div className="gf-laser gf-laser-v sg-x-right gf-laser-v-rev" style={{ animationDelay: '2s' }} />
       </div>
 
-      <main className="page-shell relative z-10 mx-auto flex min-h-screen w-full flex-col">
-        <header className="page-header flex items-center gap-3 text-white/95 sm:gap-3.5 mt-4">
-          <div className="nav-brand-shell h-7 w-7 shrink-0 sm:h-8 sm:w-8">{icons.navLogo}</div>
-          <span className="page-brand-text text-[20px] font-medium tracking-[-0.055em] text-white/92 hero-type-glow sm:text-[22px]">Ascend</span>
+      <main className="page-shell">
+        <header className="page-header stage-brand flex items-center gap-3 text-white">
+          <div className="h-7 w-7 shrink-0">{icons.navLogo}</div>
+          <span className="text-[20px] font-medium tracking-tight">Ascend</span>
         </header>
 
-        <section className="desktop-stage grid flex-1 grid-cols-1 gap-8 pt-8 sm:gap-10 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(388px,428px)] lg:items-stretch lg:gap-9 xl:grid-cols-[minmax(0,1fr)_minmax(408px,449px)] xl:pt-10 2xl:grid-cols-[minmax(0,1fr)_minmax(428px,469px)]">
-          <div className="order-1 flex h-full items-center lg:items-end lg:pl-8 xl:pl-12 2xl:pl-14">
-            <div className="hero-copy relative mx-0 w-full max-w-[352px] pb-2 pt-4 lg:mx-0 lg:max-w-[34rem] lg:pb-8 lg:pt-6 xl:max-w-[36rem] xl:pb-10 xl:pt-8 2xl:max-w-[38rem]">
-              <div className="mb-6 text-left sm:mb-8 lg:mb-10 lg:text-left">
-                <div className="hero-mark-row mb-4 flex flex-col items-start justify-start gap-3 sm:mb-5 lg:mb-4 lg:block">
-                  <div className="hero-coin-shell h-16 w-16 shrink-0 sm:h-20 sm:w-20 lg:mb-4 lg:h-[118px] lg:w-[118px] xl:h-[132px] xl:w-[132px]">
-                    <img src="/assets/image.png" alt="Ascend Coin" className="hero-coin-image h-full w-full object-contain" />
-                  </div>
-                  <div className="hero-badge-wrap inline-block bg-[#f7663f] leading-none">
-                    <span className="hero-badge-text block hero-display font-semibold text-[clamp(3.5rem,6vw,4rem)] uppercase tracking-[-0.04em] text-white leading-none m-0 p-0">
-                      $ASCEND
-                    </span>
-                  </div>
+        <section className="desktop-stage">
+          <div className="hero-column flex h-full items-center justify-center sm:items-start sm:justify-start xl:items-center">
+            <div className="hero-content-shell relative p-1.5 sm:p-2">
+              <div className="hero-stack relative">
+                <div className="hero-badge-wrap reveal-1">
+                  <span className="hero-badge-text">$ASCEND</span>
                 </div>
-                <h1 className="hero-display hero-title mb-6 font-semibold text-[clamp(4.5rem,9vw,7.5rem)] leading-[1.1] tracking-[-0.05em] text-white hero-type-glow sm:mb-8 lg:mb-10">
-                  <span className="block">Liquid</span>
-                  <span className="block mt-3 sm:mt-4 lg:mt-6">Staking</span>
-                </h1>
-                <div className="hero-summary-row mt-1 flex flex-col items-center gap-4 sm:mt-2 sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:mt-3 lg:items-end lg:gap-8">
-                  <p className="hero-summary mb-4 mx-0 max-w-[800px] text-left text-[16px] sm:mb-6 sm:text-[20px] lg:mb-10 lg:text-[28.28px] font-normal leading-[1.3] tracking-[-0.02em] text-white sm:text-left translate-y-[0.5%]">
-                    First crosschain compatible Liquid staking<span className="hero-summary-break"></span>
-                    protocol. Earn 100% of protocol revenue.
+                
+                <div className="hero-copy-shell mb-10 md:mb-12">
+                  <h1 className="hero-title reveal-2">
+                    Liquid<br />Staking
+                  </h1>
+                  <p className="hero-summary reveal-3 max-w-[420px]">
+                    Stake to earn your share of 100% of Ascend protocol revenue
                   </p>
-                  <div className="hero-cta-wrap relative hidden lg:flex lg:w-full lg:flex-1 lg:justify-start">
-                    <button
-                      type="button"
-                      className="arrow-tile relative mx-auto flex items-center justify-center text-[#F35233] transition-transform hover:scale-105 active:scale-95 lg:ml-auto lg:translate-x-[35%] lg:-translate-y-[50%] xl:translate-x-[55%] 2xl:translate-x-[65%]"
-                      aria-label="Open staking flow"
-                    >
-                      <span className="flex h-[46px] w-[46px] items-center justify-center translate-x-[1px]">
-                        {icons.arrow}
-                      </span>
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="panel-column order-2 w-full lg:ml-auto lg:max-w-[367px] lg:translate-y-6 xl:max-w-[388px] xl:translate-y-8 2xl:max-w-[408px] 2xl:translate-y-9">
-            <div className="panel-shell relative rounded-[28px] p-1.5 sm:p-2">
-              <div className="panel-card relative rounded-[24px] bg-[radial-gradient(circle_at_50%_0%,rgba(100,20,20,0.35),rgba(40,10,10,0.88)_35%,rgba(15,5,5,0.96)_60%,rgba(8,3,3,1)_100%)] px-4 pb-1 pt-1.5 shadow-[0_24px_48px_rgba(0,0,0,0.5)] sm:px-5 sm:pb-1 md:px-6 md:pb-1.5">
-                <div className="panel-header mb-1 flex flex-col items-center text-center">
-                  <div className="panel-brand-shell mb-1 h-[28px] w-[28px] shrink-0 sm:h-[30px] sm:w-[30px]">{icons.heroLogo}</div>
-                  <h2 className="panel-title text-[clamp(1.12rem,2.58vw,1.62rem)] font-medium tracking-[-0.05em] text-white hero-type-glow">$Ascend Liquid Staking</h2>
-                  <p className="panel-subtitle mt-0 text-[9px] tracking-[-0.03em] sm:text-[10px]">Stake to earn a part of 100% of Ascend protocol revenue</p>
+          <div className="panel-column panel-float">
+            <div className="panel-shell relative p-1">
+              <div className="panel-rim"></div>
+
+              <div className="panel-card relative rounded-[24px] bg-[radial-gradient(circle_at_50%_0%,rgba(120,30,20,0.4),rgba(15,5,5,0.98)_40%,rgba(8,3,3,1)_100%)] px-4 pb-3 pt-6 sm:rounded-[26px] sm:px-5 sm:pb-3 sm:pt-7 md:rounded-[28px] md:px-6 md:pb-2 md:pt-8">
+                <div className="panel-shine"></div>
+                <div className="panel-header mb-5 flex flex-col items-center text-center sm:mb-7 md:mb-8">
+                  <div className="panel-brand-shell reveal-2 mb-3 h-10 w-10 sm:mb-4 sm:h-12 sm:w-12">
+                    <img src="/assets/card.svg" alt="Ascend" className="h-full w-full object-contain" />
+                  </div>
+                  <h2 className="reveal-3 text-[1.35rem] font-bold leading-[1.05] tracking-[-0.03em] text-white sm:text-[1.6rem] md:text-[1.8rem]">
+                    $Ascend Liquid Staking
+                  </h2>
+                  <p className="panel-subtitle reveal-4">
+                    Select wallet to start staking
+                  </p>
                 </div>
-                <div className="panel-sections space-y-4">
-                  <WalletSection title="CHOOSE CARDANO WALLET" wallets={cardanoWallets} />
+
+                <div className="panel-sections space-y-5">
+                  <WalletSection 
+                    title="CHOOSE A WALLET TO CONTINUE" 
+                    wallets={cardanoWallets} 
+                    onCardanoClick={() => setIsModalOpen(true)}
+                  />
                   <WalletSection title="OR SWAP TOKENS TO $ASCEND" wallets={swapWallets} />
 
-                  <section className="buy-card wallet-block rounded-[18px] bg-[linear-gradient(180deg,#15141A_0%,#0E0D12_100%)] p-0 overflow-hidden">
-                    <div className="flex min-h-[46px] items-stretch">
-                      <div className="buy-thumb w-[54px] shrink-0 sm:w-[65px] md:w-[75px] relative overflow-hidden rounded-l-[14px] rounded-tr-[18px] rounded-br-[6px] bg-[linear-gradient(180deg,#5A5A60_0%,#2A2A2F_40%,#141417_75%,#0B0B0D_100%)]">
-                        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.30)_0%,rgba(255,255,255,0.12)_25%,rgba(255,255,255,0.04)_45%,rgba(255,255,255,0)_65%)]"></div>
-                        <div className="absolute top-[42%] left-0 right-0 h-[8px] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)] blur-md opacity-60"></div>
-                      </div>
-                      <div className="buy-content flex min-h-[46px] flex-1 items-center justify-between gap-2 px-3 py-0.5">
+                  <div className="buy-card relative mt-4 overflow-hidden rounded-[20px] bg-[#0A0A0C] p-3 sm:mt-5 sm:rounded-[22px] sm:p-3.5 md:mt-6 md:rounded-[24px] md:p-4 border border-white/5">
+                    <div className="flex items-center justify-between gap-3 sm:gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="card-art-thumb h-12 w-20 rounded-lg bg-gradient-to-br from-white/10 to-transparent"></div>
                         <div>
-                          <div className="buy-title text-[12px] font-semibold tracking-[-0.04em] text-white hero-type-glow sm:text-[13px] -mt-0.5 sm:-mt-2 lg:-mt-3">
-                            Buy $Ascend with card
-                          </div>
-                          <div className="buy-payments mt-0 flex items-center gap-1.5">
-                            <span className="rounded-[3px] bg-white px-1 py-0.5 text-[6.5px] font-black tracking-tighter text-[#253b9a] leading-none">VISA</span>
-                            <div className="flex items-center -space-x-1">
-                              <span className="h-1.5 w-1.5 rounded-full bg-[#eb001b]"></span>
-                              <span className="h-1.5 w-1.5 rounded-full bg-[#f79e1b] opacity-90"></span>
-                            </div>
-                            <div className="flex items-center gap-[2px] text-white/90">
-                              <span className="flex items-center justify-center h-3 w-3">
+                          <h3 className="text-[0.95rem] font-semibold text-white sm:text-[1rem]">Buy $Ascend with card</h3>
+                          <div className="mt-2.5 flex items-center gap-3">
+                            <div className="payment-icons flex items-center gap-2">
+                              <span className="rounded-[4px] bg-white px-1 py-0.5 text-[0.5rem] font-black text-[#1a2f80]">VISA</span>
+                              <div className="flex -space-x-1.5">
+                                <div className="h-4 w-4 rounded-full bg-[#eb001b]"></div>
+                                <div className="h-4 w-4 rounded-full bg-[#f79e1b] opacity-90"></div>
+                              </div>
+                              <div className="flex items-center gap-1 text-white text-[0.8rem]">
                                 {icons.apple}
-                              </span>
-                              <span className="text-[10px] font-medium leading-none tracking-tight">Pay</span>
+                                <span className="font-semibold">Pay</span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <button type="button" className="wallet-arrow shrink-0 h-5 w-5 bg-white/5" aria-label="Buy with card">
-                          <span className="h-3.5 w-3.5">{icons.chevron}</span>
-                        </button>
+                      </div>
+                      <div className="wallet-arrow flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-white/40">
+                        <div className="h-5 w-5">{icons.chevron}</div>
                       </div>
                     </div>
-                  </section>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
       </main>
+
+      {/* ── CONNECT MODAL ── */}
+      <ConnectModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
+    </div>
+  );
+}
+
+function ConnectModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      
+      {/* Modal Content */}
+      <div className="modal-reveal relative w-full max-w-[440px] overflow-hidden rounded-[32px] border border-white/5 bg-[#110e0e] p-1.5 shadow-2xl">
+        <div className="relative rounded-[28px] bg-[radial-gradient(circle_at_50%_0%,rgba(120,30,20,0.35),rgba(15,5,5,0.98)_40%,rgba(8,3,3,1)_100%)] px-6 pb-8 pt-10">
+          
+          <button 
+            onClick={onClose}
+            className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-white/40 transition hover:bg-white/10 hover:text-white"
+          >
+            <div className="h-6 w-6">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          </button>
+
+          <div className="mb-10 flex flex-col items-start px-2">
+            <div className="mb-4 h-14 w-14 bg-[#FF5C33] rounded-2xl p-2.5">
+              <img src="/assets/cardano.svg" alt="Cardano" className="h-full w-full object-contain" />
+            </div>
+            <h2 className="text-[26px] font-bold tracking-tight text-white">Connect Wallet</h2>
+            <p className="text-[14px] font-medium text-white/40">Choose a Cardano wallet</p>
+          </div>
+
+          <div className="space-y-3">
+            {connectWallets.map((wallet, i) => (
+              <button
+                key={i}
+                className="flex w-full items-center justify-between gap-3 rounded-2xl bg-white/[0.03] p-3.5 transition-all hover:bg-white/[0.06] active:scale-[0.98]"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl">
+                    <img src={wallet.icon} alt={wallet.name} className="h-full w-full object-contain" />
+                  </div>
+                  <span className="text-[17px] font-semibold text-white/95">{wallet.name}</span>
+                </div>
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg text-white/20">
+                  <div className="h-5 w-5">{icons.chevron}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 function GuideDiamond({ className }: { className: string }) {
-  return (
-    <span className={`absolute ${className} h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border border-white/90 bg-transparent shadow-[0_0_4px_rgba(255,255,255,0.3)]`}></span>
-  );
+  return <span className={`gf-dot absolute ${className}`}></span>;
 }
 
-function WalletSection({ title, wallets }: { title: string; wallets: WalletEntry[] }) {
+function WalletSection({ title, wallets, onCardanoClick }: { title: string; wallets: WalletEntry[]; onCardanoClick?: () => void }) {
   const isSwapSection = title.startsWith("OR ");
+  const baseDelay = isSwapSection ? 0.9 : 0.7;
   return (
-    <section className="wallet-block rounded-[16px] bg-[#19181D] px-4 py-1 sm:px-5">
-      <div className="wallet-section-title mb-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] sm:text-[9px]">
+    <section className="wallet-block reveal-card rounded-[16px] bg-[#19181D] px-3.5 py-2.5 sm:px-4 sm:py-3">
+      <div className="wallet-section-title mb-2 flex items-center justify-between gap-2 text-[0.44rem] font-semibold uppercase tracking-[0.14em] sm:text-[0.5rem]">
         {isSwapSection ? (
           <>
-            <span className="text-white/20 font-normal">OR</span>{" "}
-            <span className="text-[#FF5C33] opacity-90 font-medium">{title.slice(3)}</span>
+            <div className="min-w-0">
+              <span className="text-white/20 font-normal">OR</span>{" "}
+              <span className="text-[#FF5C33] opacity-90 font-medium">{title.slice(3)}</span>
+            </div>
+            <span className="coming-soon-badge shrink-0">Coming Soon</span>
           </>
         ) : (
           <span className="text-[#FF5C33] opacity-90 font-medium">{title}</span>
@@ -273,26 +266,39 @@ function WalletSection({ title, wallets }: { title: string; wallets: WalletEntry
       </div>
       <div className="space-y-1">
         {wallets.map((wallet, i) => (
-          <WalletRow key={i} wallet={wallet} />
+          <WalletRow 
+            key={i} 
+            wallet={wallet} 
+            delay={baseDelay + i * 0.1} 
+            onClick={wallet.isCardano ? onCardanoClick : undefined}
+          />
         ))}
       </div>
     </section>
   );
 }
 
-function WalletRow({ wallet }: { wallet: WalletEntry }) {
+function WalletRow({ wallet, delay, onClick }: { wallet: WalletEntry; delay: number; onClick?: () => void }) {
   return (
     <button
       type="button"
-      className="wallet-row flex w-full items-center justify-between gap-2 rounded-[12px] bg-transparent px-3 py-1 text-left text-white transition sm:px-4"
+      onClick={onClick}
+      className={`wallet-row wallet-reveal flex w-full items-center justify-between gap-2 rounded-[12px] bg-transparent px-2.5 py-2 text-left text-white transition sm:px-3.5 sm:py-2.5 ${onClick ? 'cursor-pointer' : 'cursor-default'}`}
+      style={{ animationDelay: `${delay}s` }}
     >
       <div className="flex min-w-0 items-center gap-2.5">
-        <div className="h-5.5 w-5.5 shrink-0 overflow-hidden rounded-[7px] sm:h-6 sm:w-6">{wallet.icon}</div>
-        <span className="wallet-name truncate text-[12px] font-medium tracking-[-0.03em] hero-type-glow sm:text-[13px]">
+        <div className="h-5.5 w-5.5 shrink-0 overflow-hidden rounded-[7px] sm:h-6 sm:w-6">
+          {typeof wallet.icon === 'string' ? (
+            <img src={wallet.icon} alt={wallet.name} className="h-full w-full object-contain" />
+          ) : (
+            wallet.icon
+          )}
+        </div>
+        <span className="wallet-name truncate text-[0.82rem] font-medium tracking-[-0.03em] hero-type-glow sm:text-[0.9rem]">
           {wallet.name}
         </span>
       </div>
-      <span className="wallet-arrow shrink-0" aria-hidden="true">
+      <span className="wallet-arrow flex h-9 w-9 shrink-0 items-center justify-center" aria-hidden="true">
         <span className="h-4 w-4">{icons.chevron}</span>
       </span>
     </button>
